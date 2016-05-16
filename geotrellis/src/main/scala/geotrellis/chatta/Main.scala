@@ -9,16 +9,8 @@ import spray.can.Http
 object Main {
 
   val weights = Map(
-    "ImperviousSurfacesBarrenLandsOpenWater" -> 1,
-    "DevelopedLand" -> 2,
-    "Wetlands" -> 3,
-    "ForestedLands" -> 4,
-    "Non-workingProtectedOrPublicLands" -> 5,
-    "PrimeAgriculturalSoilsNotForestedOrFarmland" -> 6,
-    "PublicallyOwnedWorkingLands" -> 7,
-    "PrivatelyOwnedWorkingLandsWithEasements" -> 8,
-    "FarmlandWithoutPrimeAgriculturalSoils" -> 9,
-    "FarmlandOrForestedLandsWithPrimeAgriculturalSoils" -> 10
+    "precipitation" -> 2,
+    "temperature_suitability" -> 2
   )
 
   def main(args: Array[String]): Unit = {
