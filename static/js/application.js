@@ -5,8 +5,8 @@ var getLayer = function(url,attrib) {
 };
 
 var Layers = {
-    stamen: { 
-        toner:  'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png',   
+    stamen: {
+        toner:  'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png',
         terrain: 'http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.png',
         watercolor: 'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png',
         attrib: 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design'
@@ -30,7 +30,7 @@ var map = (function() {
 
     var m = L.map('map');
 
-    m.setView([34.76192255039478,-85.35140991210938], 9);
+    m.setView([40.76192255039478,35.35140991210938], 6);
 
     selected.addTo(m);
 
@@ -59,19 +59,19 @@ var weightedOverlay = (function() {
         return _.map(notZeros, function(l) { return l.weight; }).join(",");
     };
 
-    update = function() {        
-        if(getLayers().length == 0) { 
+    update = function() {
+        if(getLayers().length == 0) {
             if (WOLayer) {
                 map.lc.removeLayer(WOLayer);
                 map.removeLayer(WOLayer);
                 WOLayer = null;
             }
-            return; 
+            return;
         };
 
         $.ajax({
             url: server + 'gt/breaks',
-            data: { 'layers' : getLayers(), 
+            data: { 'layers' : getLayers(),
                     'weights' : getWeights(),
                     'numBreaks': numBreaks },
             dataType: "json",
@@ -92,7 +92,7 @@ var weightedOverlay = (function() {
                     geoJson = GJ.fromPolygon(polygon);
                 }
 
-				WOLayer = new L.tileLayer(server + 
+				WOLayer = new L.tileLayer(server +
                     'gt/tms/{z}/{x}/{y}?layers={layers}' +
                      '&weights={weights}&breaks={breaks}&colorRamp={colorRamp}&mask={mask}', {
                     format: 'image/png',
@@ -104,7 +104,7 @@ var weightedOverlay = (function() {
                     mask: encodeURIComponent(geoJson),
                     attribution: 'Azavea'
                 });
-                				
+
                 WOLayer.setOpacity(opacity);
                 WOLayer.addTo(map);
                 map.lc.addOverlay(WOLayer, "Weighted Overlay");
@@ -134,7 +134,7 @@ var weightedOverlay = (function() {
     var bindSliders = function() {
         var pList = $("#parameters");
         pList.empty();
-        
+
         _.map(layers, function(l) {
             var p = $("#parameterSlider").clone();
             p.find(".slider-label").text(l.display);
@@ -161,13 +161,13 @@ var weightedOverlay = (function() {
     return {
         activeLayers: getLayers,
         activeWeights: getWeights,
-        
+
         bindSliders : bindSliders,
 
-        setLayers: function(ls) { 
-            layers = ls; 
+        setLayers: function(ls) {
+            layers = ls;
             bindSliders();
-            update(); 
+            update();
         },
         setNumBreaks: function(nb) {
             numBreaks = nb;
@@ -177,7 +177,7 @@ var weightedOverlay = (function() {
             opacity = o;
             opacitySlider.slider('value', o);
         },
-        setColorRamp: function(key) { 
+        setColorRamp: function(key) {
             colorRamp = key;
             update();
         },
@@ -197,16 +197,16 @@ var summary = (function() {
     var update = function(switchTab) {
         if(polygon != null) {
             if(weightedOverlay.activeLayers().length == 0) {
-                $("#summary-data").empty();                
+                $("#summary-data").empty();
                 return;
             };
 
             var geoJson = GJ.fromPolygon(polygon);
 
-            $.ajax({        
+            $.ajax({
                 url: server + 'gt/sum',
-                data: { polygon : geoJson, 
-                        layers  : weightedOverlay.activeLayers(), 
+                data: { polygon : geoJson,
+                        layers  : weightedOverlay.activeLayers(),
                         weights : weightedOverlay.activeWeights()
                       },
                 dataType: "json",
@@ -221,14 +221,14 @@ var summary = (function() {
                             var layerName = "Layer:";
                         }
 
-                        sdata.append($('<tr><td style="text-align:right;">' + weights[ls.layer] + 
-                                       '</td><td>' + layerName + '</td>' + 
-                                       '<td class="bold" style="text-align:right;">' + ls.total + 
+                        sdata.append($('<tr><td style="text-align:right;">' + weights[ls.layer] +
+                                       '</td><td>' + layerName + '</td>' +
+                                       '<td class="bold" style="text-align:right;">' + ls.total +
                                        '</td></tr>'));
                     });
 
-                    sdata.append($('<tr class="warning"><td></td><td class="bold">Score:</td>' + 
-                                   '<td class="bold" style="text-align:right;">' + data.total + 
+                    sdata.append($('<tr class="warning"><td></td><td class="bold">Score:</td>' +
+                                   '<td class="bold" style="text-align:right;">' + data.total +
                                    '</td></tr>'));
 
                     if(switchTab) { $('a[href=#summary]').tab('show'); };
@@ -238,8 +238,8 @@ var summary = (function() {
     };
     return {
         getPolygon: function() { return polygon; },
-        setPolygon: function(p) { 
-            polygon = p; 
+        setPolygon: function(p) {
+            polygon = p;
             weightedOverlay.update();
             update(true);
         },
@@ -302,7 +302,7 @@ var drawing = (function() {
 
     map.on('draw:edited', function(e) {
         var polygon = summary.getPolygon();
-        if(polygon != null) { 
+        if(polygon != null) {
             summary.update();
             weightedOverlay.update();
         }
@@ -340,7 +340,7 @@ var colorRamps = (function() {
         ramps.append(p);
     }
 
-    return { 
+    return {
         bindColorRamps: function() {
             $.ajax({
                 url: 'gt/colors',

@@ -9,8 +9,8 @@ import spray.can.Http
 object Main {
 
   val weights = Map(
-    "precipitation" -> 2,
-    "temperature_suitability" -> 2
+    "IraqTemp" -> 1,
+    "IraqPrecip" -> 2
   )
 
   def main(args: Array[String]): Unit = {
