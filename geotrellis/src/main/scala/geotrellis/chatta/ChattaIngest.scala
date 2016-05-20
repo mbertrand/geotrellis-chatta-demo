@@ -14,6 +14,6 @@ import org.apache.spark.SparkConf
 
 object ChattaIngest extends App {
   implicit val sc = SparkUtils.createSparkContext("GeoTrellis ETL SinglebandIngest", new SparkConf(true))
-  Etl.ingest[ProjectedExtent, SpatialKey, Tile](args, ZCurveKeyIndexMethod)
+  Etl.ingest[ProjectedExtent, SpatialKey, Tile](args, ZCurveKeyIndexMethod, max_zoom = 20)
   sc.stop()
 }
