@@ -55,7 +55,7 @@ trait ChattaService extends HttpService with LazyLogging {
   lazy val attributeStore = AccumuloAttributeStore(accumulo.connector)
 
   val staticPath: String
-  val baseZoomLevel = 9
+  val baseZoomLevel = 6
 
   def layerId(layer: String): LayerId =
     LayerId(layer, baseZoomLevel)
